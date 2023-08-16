@@ -1,9 +1,9 @@
 import React from 'react';
-import LoaderSpinner from 'react-loader-spinner';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const Loader = () => (
   <div className="loader">
-    <LoaderSpinner type="Oval" color="#00BFFF" height={80} width={80} />
+    <InfinitySpin width="200" color="#4fa94d" />;
   </div>
 );
 

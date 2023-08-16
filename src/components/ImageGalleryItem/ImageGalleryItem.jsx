@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 const ImageGalleryItem = ({ item }) => (
   <>
-    <li className="gallery-item">
+    <li className="galleryItem">
       <img src="" alt="" />
     </li>
   </>
