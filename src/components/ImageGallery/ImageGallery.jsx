@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import styles from '../../css/styles.css';
+import styles from '../../css/styles.module.css';
 
 const ImageGallery = ({ images }) => (
   <>
-    <ul className={styles.galery}></ul>
+    <ul className={styles.ImageGallery}></ul>
   </>
 );
 

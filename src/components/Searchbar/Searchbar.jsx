@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 
-import styles from '../../css/styles.css';
+import styles from '../../css/styles.module.css';
 
 const Searchbar = ({ onSubmit }) => (
-  <header className="styles.searchbar">
-    <form className="styles.form" onSubmit={onSubmit}>
-      <button type="styles.submit" className="button">
-        <span className="styles.button-label">Search</span>
+  <header className={styles.Searchbar}>
+    <form className={styles.SearchForm} onSubmit={onSubmit}>
+      <button type="submit" className={styles.SearchFormButton}>
+        <span className={styles.SearchFormButtonLabel}>
+          <i className="fa fa-search" aria-hidden="true"></i>
+          Search
+        </span>
       </button>
 
       <input
-        className="styles.input"
+        className={styles.SearchFormInput}
         type="text"
         autoComplete="off"
         autoFocus

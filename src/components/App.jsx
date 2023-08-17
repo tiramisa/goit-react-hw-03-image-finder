@@ -6,7 +6,7 @@ import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
-import '../css/styles.css';
+import '../css/styles.module.css';
 
 export const App = () => {
   const isLoading = false;
