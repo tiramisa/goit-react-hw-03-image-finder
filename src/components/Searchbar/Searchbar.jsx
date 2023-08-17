@@ -8,7 +8,6 @@ const Searchbar = ({ onSubmit }) => (
       <button type="submit" className={styles.SearchFormButton}>
         <span className={styles.SearchFormButtonLabel}>
           <i className="fa fa-search" aria-hidden="true"></i>
-          Search
         </span>
       </button>
 
