@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import SearchBar from './SearchBar/SearchBar';
 import { unsplashInstance } from 'api';
-import { Component } from 'react';
 
 import '../css/styles.module.css';
 
@@ -16,15 +15,27 @@ export class App extends Component {
   };
 
   updateImages = newImages => {
-    this.setState(prevState => ({
-      images: newImages,
-    }));
+    this.setState({ images: newImages });
   };
 
   updateIsLoading = isLoading => {
-    this.setState(prevState => ({
-      isLoading: isLoading,
-    }));
+    this.setState({ isLoading });
+  };
+
+  handleLoadMoreClick = () => {
+    this.updateIsLoading(true);
+
+    unsplashInstance
+      .fetchPhotos()
+      .then(response => response.json())
+      .then(data => {
+        this.updateImages([...this.state.images, ...data.hits]);
+        this.updateIsLoading(false);
+      })
+      .catch(error => {
+        console.error('Error loading more images:', error);
+        this.updateIsLoading(false);
+      });
   };
 
   render() {
@@ -38,17 +49,19 @@ export class App extends Component {
             this.updateIsLoading(true);
             unsplashInstance
               .fetchPhotos()
+              .then(response => response.json())
               .then(data => {
-                data.json().then(json => {
-                  this.updateImages(json.hits);
-                  this.updateIsLoading(false);
-                });
+                this.updateImages(data.hits);
+                this.updateIsLoading(false);
               })
-              .finally();
+              .catch(error => {
+                console.error('Error loading images:', error);
+                this.updateIsLoading(false);
+              });
           }}
         />
         {isLoading ? <Loader /> : <ImageGallery images={images} />}
-        <Button />
+        <Button onClick={this.handleLoadMoreClick} />
       </div>
     );
   }
