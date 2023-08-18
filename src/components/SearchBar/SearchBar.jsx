@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../../css/styles.module.css';
 import { unsplashInstance } from 'api';
 
@@ -28,10 +29,14 @@ const SearchBar = ({ onSubmit }) => (
         type="text"
         autoComplete="off"
         autoFocus
+        name="searchTerm"
         placeholder="Search images and photos"
       />
     </form>
   </header>
 );
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default SearchBar;
