@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import styles from '../../css/styles.module.css';
 
 const Button = ({ onClick, hasMoreImages }) => (
@@ -7,5 +7,10 @@ const Button = ({ onClick, hasMoreImages }) => (
     Load more
   </button>
 );
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  hasMoreImages: PropTypes.bool.isRequired,
+};
 
 export default Button;

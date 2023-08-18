@@ -23,8 +23,10 @@ body {
 
 img {
   display: block;
-  max-width: 100%;
-  height: auto;
+  object-fit: cover;
+  width: 100%;
+  height: 200px;
+  cursor: pointer;
 }
 
 /*
@@ -40,7 +42,7 @@ img {
 /*
  * Стили компонента Searchbar
  */
-.Searchbar {
+.SearchBar {
   top: 0;
   left: 0;
   position: sticky;
@@ -212,4 +214,9 @@ img {
 .Button:hover,
 .Button:focus {
   background-color: #303f9f;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
 }

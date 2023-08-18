@@ -1,9 +1,15 @@
 import React from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
+import styles from '../../css/styles.module.css';
 
 const Loader = () => (
-  <div className="loader">
-    <InfinitySpin width="200" color="#4fa94d" />;
+  <div className={styles.loader}>
+    <InfinitySpin
+      width="200"
+      color="#4fa94d"
+      ariaLabel="three-dots-loading"
+      wrapperClassName=""
+    />
   </div>
 );
 

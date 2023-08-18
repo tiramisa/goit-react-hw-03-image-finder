@@ -2,66 +2,80 @@ import React, { Component } from 'react';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
-import Modal from './Modal/Modal';
+import { Modal } from './Modal/Modal';
 import SearchBar from './SearchBar/SearchBar';
 import { unsplashInstance } from 'api';
-
 import '../css/styles.module.css';
 
 export class App extends Component {
   state = {
     images: [],
     isLoading: false,
+    showModal: false,
+    modalData: {},
   };
 
-  updateImages = newImages => {
-    this.setState({ images: newImages });
+  handleImageClick = data => {
+    this.setState({ showModal: true, modalData: data });
   };
 
-  updateIsLoading = isLoading => {
-    this.setState({ isLoading });
+  closeModal = () => {
+    this.setState({ showModal: false });
   };
 
   handleLoadMoreClick = () => {
-    this.updateIsLoading(true);
+    this.setState({ isLoading: true });
 
     unsplashInstance
       .fetchPhotos()
       .then(response => response.json())
       .then(data => {
-        this.updateImages([...this.state.images, ...data.hits]);
-        this.updateIsLoading(false);
+        this.setState(prevState => ({
+          images: [...prevState.images, ...data.hits],
+          isLoading: false,
+        }));
       })
       .catch(error => {
         console.error('Error loading more images:', error);
-        this.updateIsLoading(false);
+        this.setState({ isLoading: false });
+      });
+  };
+
+  handleSearchSubmit = () => {
+    this.setState({ isLoading: true });
+
+    unsplashInstance
+      .fetchPhotos()
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          images: data.hits,
+          isLoading: false,
+        });
+      })
+      .catch(error => {
+        console.error('Error loading images:', error);
+        this.setState({ isLoading: false });
       });
   };
 
   render() {
-    const { images, isLoading } = this.state;
+    const { images, isLoading, showModal, modalData } = this.state;
 
     return (
       <div className="root">
-        <Modal />
-        <SearchBar
-          onSubmit={() => {
-            this.updateIsLoading(true);
-            unsplashInstance
-              .fetchPhotos()
-              .then(response => response.json())
-              .then(data => {
-                this.updateImages(data.hits);
-                this.updateIsLoading(false);
-              })
-              .catch(error => {
-                console.error('Error loading images:', error);
-                this.updateIsLoading(false);
-              });
-          }}
+        <Modal
+          data={{ img: 'url_to_image', alt: 'alt_text' }}
+          closeModal={this.closeModal}
         />
-        {isLoading ? <Loader /> : <ImageGallery images={images} />}
-        <Button onClick={this.handleLoadMoreClick} />
+
+        <SearchBar onSubmit={this.handleSearchSubmit} />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <ImageGallery images={images} onClickImage={this.handleImageClick} />
+        )}
+        <Button onClick={this.handleLoadMoreClick} hasMoreImages={true} />
       </div>
     );
   }
