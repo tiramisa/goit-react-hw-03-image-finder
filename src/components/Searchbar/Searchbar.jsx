@@ -3,7 +3,7 @@ import styles from '../../css/styles.module.css';
 import { unsplashInstance } from 'api';
 
 const SearchBar = ({ onSubmit }) => (
-  <header className={styles.Searchbar}>
+  <header className={styles.SearchBar}>
     <form
       className={styles.SearchForm}
       onSubmit={event => {
