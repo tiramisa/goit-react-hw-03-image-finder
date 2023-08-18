@@ -12,11 +12,11 @@ export class App extends Component {
     images: [],
     isLoading: false,
     showModal: false,
-    modalData: {},
+    modalData: { img: '', alt: '' },
   };
 
-  handleImageClick = data => {
-    this.setState({ showModal: true, modalData: data });
+  handleImageClick = imageData => {
+    this.setState({ showModal: true, modalData: imageData });
   };
 
   closeModal = () => {
@@ -72,7 +72,6 @@ export class App extends Component {
     return (
       <div className="root">
         {showModal && <Modal data={modalData} closeModal={this.closeModal} />}
-
         <SearchBar onSubmit={this.handleSearchSubmit} />
         {isLoading ? (
           <Loader />
