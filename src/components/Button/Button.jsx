@@ -3,7 +3,7 @@ import React from 'react';
 import styles from '../../css/styles.module.css';
 
 const Button = ({ onClick, hasMoreImages }) => (
-  <button type="styles.button" className="load-more-button" onClick={onClick}>
+  <button type="button" className={styles.Button} onClick={onClick}>
     Load more
   </button>
 );
