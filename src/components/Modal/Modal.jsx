@@ -5,7 +5,7 @@ import styles from '../../css/styles.module.css';
 export const Modal = ({ data, closeModal }) => (
   <div className={styles.Overlay} onClick={closeModal}>
     <div className={styles.Modal}>
-      <img src={data.img} alt={data.alt} />
+      <img src={data.img} alt="" />
     </div>
   </div>
 );
