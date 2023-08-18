@@ -6,7 +6,7 @@ import styles from '../../css/styles.module.css';
 const ImageGallery = ({ images }) => (
   <ul className={styles.ImageGallery}>
     {images.map(element => (
-      <ImageGalleryItem item={element} />
+      <ImageGalleryItem key={element.id} item={element} />
     ))}
   </ul>
 );
