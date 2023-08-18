@@ -16,6 +16,7 @@ export class App extends Component {
   };
 
   handleImageClick = imageData => {
+    console.log(imageData);
     this.setState({ showModal: true, modalData: imageData });
   };
 
