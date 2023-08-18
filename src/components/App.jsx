@@ -30,8 +30,16 @@ export class App extends Component {
       .fetchPhotos()
       .then(response => response.json())
       .then(data => {
+        // Фильтруем изображения, чтобы исключить уже загруженные
+        const newImages = data.hits.filter(
+          newImage =>
+            !this.state.images.some(
+              existingImage => existingImage.id === newImage.id
+            )
+        );
+
         this.setState(prevState => ({
-          images: [...prevState.images, ...data.hits],
+          images: [...prevState.images, ...newImages],
           isLoading: false,
         }));
       })
@@ -64,10 +72,7 @@ export class App extends Component {
 
     return (
       <div className="root">
-        <Modal
-          data={{ img: 'url_to_image', alt: 'alt_text' }}
-          closeModal={this.closeModal}
-        />
+        {showModal && <Modal data={modalData} closeModal={this.closeModal} />}
 
         <SearchBar onSubmit={this.handleSearchSubmit} />
         {isLoading ? (
