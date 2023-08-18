@@ -30,7 +30,6 @@ export class App extends Component {
       .fetchPhotos()
       .then(response => response.json())
       .then(data => {
-        // Фильтруем изображения, чтобы исключить уже загруженные
         const newImages = data.hits.filter(
           newImage =>
             !this.state.images.some(
