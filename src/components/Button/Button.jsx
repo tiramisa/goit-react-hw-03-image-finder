@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import styles from '../../css/styles.module.css';
 
 const Button = ({ onClick, hasMoreImages }) => (
-  <button type="button" className={styles.Button} onClick={onClick}>
-    Load more
-  </button>
+  <div className={hasMoreImages ? styles.VisibleElement : styles.HiddenElement}>
+    <button type="button" className={styles.Button} onClick={onClick}>
+      Load more
+    </button>
+  </div>
 );
 
 Button.propTypes = {

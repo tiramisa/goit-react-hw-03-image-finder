@@ -4,6 +4,7 @@ class UnsplashAPI {
   q = null;
   page = 1;
   itemsPerPage = 12;
+  //это и метод и функция
   fetchPhotos() {
     let url = `${this.#BASE_URL}?key=38292476-2e9a08398af0b2923a0e3887f&q=${
       this.q

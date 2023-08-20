@@ -10,7 +10,12 @@ const ImageGalleryItem = ({ item, onClickImage }) => {
         className={styles.ImageGalleryItemImage}
         src={item.previewURL}
         alt={tags}
-        onClick={onClickImage}
+        onClick={e =>
+          onClickImage({
+            img: item.previewURL,
+            alt: item.tags,
+          })
+        }
       />
     </li>
   );

@@ -25,41 +25,24 @@ export class App extends Component {
   };
 
   handleLoadMoreClick = () => {
-    this.setState({ isLoading: true });
-
-    unsplashInstance
-      .fetchPhotos()
-      .then(response => response.json())
-      .then(data => {
-        const newImages = data.hits.filter(
-          newImage =>
-            !this.state.images.some(
-              existingImage => existingImage.id === newImage.id
-            )
-        );
-
-        this.setState(prevState => ({
-          images: [...prevState.images, ...newImages],
-          isLoading: false,
-        }));
-      })
-      .catch(error => {
-        console.error('Error loading more images:', error);
-        this.setState({ isLoading: false });
-      });
+    unsplashInstance.page++;
+    this.fetchImages();
   };
 
   handleSearchSubmit = () => {
-    this.setState({ isLoading: true });
+    this.setState(prevState => ({
+      images: [],
+      isLoading: false,
+    }));
+    this.fetchImages();
+  };
 
+  fetchImages = () => {
     unsplashInstance
       .fetchPhotos()
       .then(response => response.json())
       .then(data => {
-        this.setState({
-          images: data.hits,
-          isLoading: false,
-        });
+        this.addImages(data.hits);
       })
       .catch(error => {
         console.error('Error loading images:', error);
@@ -67,9 +50,15 @@ export class App extends Component {
       });
   };
 
+  addImages = images => {
+    this.setState(prevState => ({
+      images: [...prevState.images, ...images],
+      isLoading: false,
+    }));
+  };
+
   render() {
     const { images, isLoading, showModal, modalData } = this.state;
-
     return (
       <div className="root">
         {showModal && <Modal data={modalData} closeModal={this.closeModal} />}
@@ -79,7 +68,10 @@ export class App extends Component {
         ) : (
           <ImageGallery images={images} onClickImage={this.handleImageClick} />
         )}
-        <Button onClick={this.handleLoadMoreClick} hasMoreImages={true} />
+        <Button
+          onClick={this.handleLoadMoreClick}
+          hasMoreImages={images.length !== 0}
+        />
       </div>
     );
   }
