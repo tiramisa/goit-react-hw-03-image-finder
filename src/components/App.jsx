@@ -14,10 +14,20 @@ export class App extends Component {
     showModal: false,
     modalData: { img: '', alt: '' },
   };
-
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
   handleImageClick = imageData => {
     console.log(imageData);
     this.setState({ showModal: true, modalData: imageData });
+  };
+  handleKeyDown = event => {
+    if (event.keyCode === 27) {
+      this.closeModal();
+    }
   };
 
   closeModal = () => {
