@@ -13,17 +13,21 @@ export class App extends Component {
     isLoading: false,
     showModal: false,
     modalData: { img: '', alt: '' },
+    hasMoreImages: false,
   };
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
+
   handleImageClick = imageData => {
     console.log(imageData);
     this.setState({ showModal: true, modalData: imageData });
   };
+
   handleKeyDown = event => {
     if (event.keyCode === 27) {
       this.closeModal();
@@ -36,6 +40,7 @@ export class App extends Component {
 
   handleLoadMoreClick = () => {
     unsplashInstance.page++;
+    this.setState({ hasMoreImages: false });
     this.fetchImages();
   };
 
@@ -53,6 +58,7 @@ export class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.addImages(data.hits);
+        this.setState({ hasMoreImages: data.hits.length > 0 });
       })
       .catch(error => {
         console.error('Error loading images:', error);
@@ -68,7 +74,8 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, showModal, modalData } = this.state;
+    const { images, isLoading, showModal, modalData, hasMoreImages } =
+      this.state;
     return (
       <div className="root">
         {showModal && <Modal data={modalData} closeModal={this.closeModal} />}
@@ -80,7 +87,7 @@ export class App extends Component {
         )}
         <Button
           onClick={this.handleLoadMoreClick}
-          hasMoreImages={images.length !== 0}
+          hasMoreImages={hasMoreImages}
         />
       </div>
     );

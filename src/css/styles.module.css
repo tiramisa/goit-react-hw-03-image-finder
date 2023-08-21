@@ -201,6 +201,7 @@ img {
 * Стили компонента Button (Load more)
 */
 .Button {
+  /* display: none; */
   justify-content: center;
   margin: 15px;
   padding: 8px 16px;
