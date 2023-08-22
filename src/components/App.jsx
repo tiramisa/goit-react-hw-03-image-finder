@@ -11,18 +11,9 @@ export class App extends Component {
     images: [],
     page: 1,
     isLoading: false,
-    showModal: false,
     modalData: { img: '', alt: '' },
     hasMoreImages: false,
   };
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
 
   fetchPhotos = (q, page) => {
     const itemsPerPage = 12;
@@ -56,17 +47,7 @@ export class App extends Component {
 
   handleImageClick = imageData => {
     console.log(imageData);
-    this.setState({ showModal: true, modalData: imageData });
-  };
-
-  handleKeyDown = event => {
-    if (event.keyCode === 27) {
-      this.closeModal();
-    }
-  };
-
-  closeModal = () => {
-    this.setState({ showModal: false });
+    this.setState({ modalData: imageData });
   };
 
   handleLoadMoreClick = () => {
