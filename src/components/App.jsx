@@ -4,6 +4,7 @@ import Loader from './Loader/Loader';
 import Button from './Button/Button';
 import SearchBar from './SearchBar/SearchBar';
 import '../css/styles.module.css';
+import fetchPhotos from './api';
 
 export class App extends Component {
   state = {
@@ -11,18 +12,7 @@ export class App extends Component {
     images: [],
     page: 1,
     isLoading: false,
-    modalData: { img: '', alt: '' },
     hasMoreImages: false,
-  };
-
-  fetchPhotos = (q, page) => {
-    const itemsPerPage = 12;
-    const baseUrl = 'https://pixabay.com/api/';
-    const apiKey = '38292476-2e9a08398af0b2923a0e3887f';
-
-    let url = `${baseUrl}?key=38292476-2e9a08398af0b2923a0e3887f&q=${q}&page=${page}&per_page=${itemsPerPage}&client_id=${apiKey}`;
-    console.log(url);
-    return fetch(url);
   };
 
   componentDidUpdate = async (prevProps, prevState) => {
@@ -32,11 +22,17 @@ export class App extends Component {
     const nextPage = this.state.page;
 
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
-      this.fetchPhotos(nextQuery, nextPage)
+      fetchPhotos(nextQuery, nextPage)
         .then(response => response.json())
         .then(data => {
-          this.addImages(data.hits);
-          this.setState({ hasMoreImages: data.hits.length > 0 });
+          let images = [...this.state.images, ...data.hits];
+          let hasMoreImages = nextPage < Math.ceil((images.length + 1) / 12);
+          console.log(hasMoreImages);
+          this.setState(prevState => ({
+            images: images,
+            isLoading: false,
+            hasMoreImages: hasMoreImages,
+          }));
         })
         .catch(error => {
           console.error('Error loading images:', error);
@@ -53,7 +49,6 @@ export class App extends Component {
   handleLoadMoreClick = () => {
     this.setState(prevState => ({
       page: prevState.page++,
-      hasMoreImages: false,
     }));
   };
 
@@ -65,13 +60,6 @@ export class App extends Component {
       query: q,
       images: [],
       page: 1,
-      isLoading: false,
-    }));
-  };
-
-  addImages = images => {
-    this.setState(prevState => ({
-      images: [...prevState.images, ...images],
       isLoading: false,
     }));
   };
