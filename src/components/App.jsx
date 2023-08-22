@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
-import { Modal } from './Modal/Modal';
 import SearchBar from './SearchBar/SearchBar';
-import { unsplashInstance } from 'api';
 import '../css/styles.module.css';
 
 export class App extends Component {
   state = {
+    query: '',
     images: [],
+    page: 1,
     isLoading: false,
     showModal: false,
     modalData: { img: '', alt: '' },
     hasMoreImages: false,
   };
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -22,6 +23,36 @@ export class App extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
+
+  fetchPhotos = (q, page) => {
+    const itemsPerPage = 12;
+    const baseUrl = 'https://pixabay.com/api/';
+    const apiKey = '38292476-2e9a08398af0b2923a0e3887f';
+
+    let url = `${baseUrl}?key=38292476-2e9a08398af0b2923a0e3887f&q=${q}&page=${page}&per_page=${itemsPerPage}&client_id=${apiKey}`;
+    console.log(url);
+    return fetch(url);
+  };
+
+  componentDidUpdate = async (prevProps, prevState) => {
+    const prevQuery = prevState.query;
+    const nextQuery = this.state.query;
+    const prevPage = prevState.page;
+    const nextPage = this.state.page;
+
+    if (prevQuery !== nextQuery || prevPage !== nextPage) {
+      this.fetchPhotos(nextQuery, nextPage)
+        .then(response => response.json())
+        .then(data => {
+          this.addImages(data.hits);
+          this.setState({ hasMoreImages: data.hits.length > 0 });
+        })
+        .catch(error => {
+          console.error('Error loading images:', error);
+          this.setState({ isLoading: false });
+        });
+    }
+  };
 
   handleImageClick = imageData => {
     console.log(imageData);
@@ -39,31 +70,22 @@ export class App extends Component {
   };
 
   handleLoadMoreClick = () => {
-    unsplashInstance.page++;
-    this.setState({ hasMoreImages: false });
-    this.fetchImages();
+    this.setState(prevState => ({
+      page: prevState.page++,
+      hasMoreImages: false,
+    }));
   };
 
-  handleSearchSubmit = () => {
+  handleSearchSubmit = evt => {
+    evt.preventDefault();
+    let q = evt.target.elements.query.value.trim();
+    console.log(q);
     this.setState(prevState => ({
+      query: q,
       images: [],
+      page: 1,
       isLoading: false,
     }));
-    this.fetchImages();
-  };
-
-  fetchImages = () => {
-    unsplashInstance
-      .fetchPhotos()
-      .then(response => response.json())
-      .then(data => {
-        this.addImages(data.hits);
-        this.setState({ hasMoreImages: data.hits.length > 0 });
-      })
-      .catch(error => {
-        console.error('Error loading images:', error);
-        this.setState({ isLoading: false });
-      });
   };
 
   addImages = images => {
@@ -74,11 +96,9 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, showModal, modalData, hasMoreImages } =
-      this.state;
+    const { images, isLoading, hasMoreImages } = this.state;
     return (
       <div className="root">
-        {showModal && <Modal data={modalData} closeModal={this.closeModal} />}
         <SearchBar onSubmit={this.handleSearchSubmit} />
         {isLoading ? (
           <Loader />

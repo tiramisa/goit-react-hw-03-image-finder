@@ -1,18 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../css/styles.module.css';
-import { unsplashInstance } from 'api';
 
 const SearchBar = ({ onSubmit }) => (
   <header className={styles.SearchBar}>
-    <form
-      className={styles.SearchForm}
-      onSubmit={event => {
-        event.preventDefault();
-        onSubmit();
-      }}
-      onChange={event => (unsplashInstance.q = event.target.value)}
-    >
+    <form className={styles.SearchForm} onSubmit={onSubmit}>
       <button type="submit" className={styles.SearchFormButton}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +21,7 @@ const SearchBar = ({ onSubmit }) => (
         type="text"
         autoComplete="off"
         autoFocus
-        name="searchTerm"
+        name="query"
         placeholder="Search images and photos"
       />
     </form>
