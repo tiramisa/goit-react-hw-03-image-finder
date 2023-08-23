@@ -19,7 +19,7 @@ class ImageGalleryItem extends Component {
   };
 
   render() {
-    const { id, webformatURL, tags } = this.props.item;
+    const { id, webformatURL, largeImageURL, tags } = this.props.item;
     const { isModalOpen } = this.state;
 
     return (
@@ -37,7 +37,7 @@ class ImageGalleryItem extends Component {
           onRequestClose={this.closeModal}
           contentLabel="Image Modal"
         >
-          <img src={webformatURL} alt={tags} />
+          <img src={largeImageURL} alt={tags} />
           <button className={styles.ModalButton} onClick={this.closeModal}>
             x
           </button>
