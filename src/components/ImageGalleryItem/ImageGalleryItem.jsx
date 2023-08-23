@@ -19,14 +19,14 @@ class ImageGalleryItem extends Component {
   };
 
   render() {
-    const { id, previewURL, tags } = this.props.item;
+    const { id, webformatURL, tags } = this.props.item;
     const { isModalOpen } = this.state;
 
     return (
       <li key={id} className={styles.ImageGalleryItem}>
         <img
           className={styles.ImageGalleryItemImage}
-          src={previewURL}
+          src={webformatURL}
           alt={tags}
           onClick={this.openModal}
         />
@@ -37,7 +37,7 @@ class ImageGalleryItem extends Component {
           onRequestClose={this.closeModal}
           contentLabel="Image Modal"
         >
-          <img src={previewURL} alt={tags} />
+          <img src={webformatURL} alt={tags} />
           <button className={styles.ModalButton} onClick={this.closeModal}>
             x
           </button>
